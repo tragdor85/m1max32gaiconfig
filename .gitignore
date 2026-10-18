@@ -1,0 +1,19 @@
+# Personal / generated files — never commit
+.env
+PLAN.md
+rendered/
+*.log
+__pycache__/
+
+# In case someone rsyncs ~/.pi/agent wholesale into pi/: generated + personal data
+pi/sessions/
+pi/todos/
+pi/pi-memory/
+pi/logs/
+pi/auth.json
+pi/models-store.json
+pi/mcp-cache.json
+pi/bin/
+pi/npm/node_modules/
+pi/extensions/*
+!pi/extensions/.gitkeep
