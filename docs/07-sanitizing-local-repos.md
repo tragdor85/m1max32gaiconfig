@@ -1,89 +1,97 @@
-# 07 — Sanitizing the local-only repos for publication
+# 07 — Sanitizing and publishing the local repos
 
-This repo vendors sanitized copies of two local-only tools (`pi-imessage`,
-`global-todo`) and documents a third (`splash-serve`). When you publish any of
-the upstreams, apply the exact changes below so the public repos contain no
-personal data. The vendored copies in this repo are the reference for the
-post-sanitization state — diff against them.
+Three of this machine's repos were local-only (no remote, or private). All
+three have been **sanitized, history-rewritten, and published**:
 
-## Personal-data inventory
+| Local repo | Public remote | Personal data found | History treatment |
+|---|---|---|---|
+| `~/code/pi-imessage` | `https://github.com/tragdor85/pi-imessage` | real phone + Apple ID email in test fixtures; dirty `.opencode/` scratch | full rewrite (values replaced in every commit) |
+| `~/code/splash-serve` | `https://github.com/tragdor85/splash-serve` | personal home-directory paths; personal LaunchAgent label in the committed plist + `install.sh` | full rewrite (paths → `$HOME`, label → generic, plist → template) |
+| `~/.pi/agent/skills/global-todo` | `https://github.com/tragdor85/pi-todo` (existing private repo, made public) | old example path + LaunchAgent label in **history**; old author identity | full rewrite (values + author/committer metadata) |
+
+Verification for each: `git log -p --all` grepped for the personal patterns
+(home directory, phone, email, label, GitHub user, `eyJ` token prefix) → zero
+hits outside self-referential public-URL mentions; plus a fresh public clone
+scanned the same way. Tests re-run green after the rewrites (pi-imessage
+`node --test test/*.test.mjs`, splash-serve `python3 watchdog/watchdog_test.py`).
+
+## What was changed per repo
+
+**pi-imessage**
+
+- `test/fixtures.mjs`, `test/factory.test.mjs`, `test/db.test.mjs`: real phone →
+  `+15551230001` / formatted `+155-5123-0001`, real Apple ID email →
+  `test@example.com` (a later pass fixed two assertions the first pass missed:
+  the last-10-digits form of the phone, and the email's case-folded variant).
+- `.gitignore` (new): `node_modules/`, `*.log`, `.DS_Store`, `.opencode/`, `state/`.
+- `config.example.json` (new) as the public config template; the live personal
+  config stays in `~/.pi/agent/pi-imessage/config.json`, outside the repo.
+- Public `README.md`; the dirty `.opencode/state.md` untracked.
+
+**splash-serve**
+
+- `README.md`, `watchdog/watchdog.py`: personal home paths → `$HOME`/`~`
+  (the watchdog's default cwd is now `~/code/splash`, expanduser'd).
+- `watchdog/install.sh`: label overridable via `SPLASH_WATCHDOG_LABEL`
+  (default `com.piagent.splash-watchdog`); the tracked plist is a template with
+  `{{HOME}}`/`{{LABEL}}` placeholders, rendered by `sed` at install time
+  (launchd does not expand `$HOME` itself).
+- The live machine was migrated to the sanitized version: old personal-label
+  agent booted out, generic agent installed, Splash `/status` verified.
+
+**pi-todo (the global-todo skill repo)**
+
+- No content changes at HEAD — the current tree was already clean. The cleanup
+  was history-only: an old example path (`SKILL.md`) and an old LaunchAgent
+  label (docs/plist text) appeared in three historical commits, plus old
+  author/committer identity in every commit.
+- `gh repo edit --visibility public --accept-visibility-change-consequences`
+  (making it public under the same name, so the live checkout's `origin` and
+  the 15-minute sync loop needed no changes).
+- The leftover `sync-test` remote branch was deleted.
+
+## The history-rewrite recipe used (git filter-branch)
+
+`git-filter-repo` was not installed; for one-off rewrites `git filter-branch`
+works. For each repo:
+
+```sh
+git filter-branch --force \
+  --tree-filter '<script: sed-replace values, rename files; must end in `true`
+                  so a missing file/renamed-condition can't abort a commit>' \
+  --env-filter 'export GIT_AUTHOR_NAME=... GIT_AUTHOR_EMAIL=...
+                GIT_COMMITTER_NAME=... GIT_COMMITTER_EMAIL=...' \
+  --msg-filter 'sed ...' \
+  -- --all
+# then strip the backup refs and objects:
+git for-each-ref --format='%(refname)' refs/original | xargs -r git update-ref -d
+git reflog expire --expire=now --all
+git gc --prune=now
+```
+
+Caveats hit: the tree-filter script must exit 0 for *every* commit (a bare
+`[ -f ... ] && mv ...` aborts the rewrite on commits where the file is absent —
+wrap in `if ... fi; true`); and `git gc` alone does not remove the old objects
+because `refs/original` still references them — delete those refs first.
+
+## How this repo consumes them
+
+- `scripts/install.sh` clones all three from the public URLs (the defaults in
+  `.env.example`); existing local checkouts are reused in place.
+- `pi/extensions/pi-imessage/` and `pi/skills/global-todo/` remain as vendored
+  fallbacks so a mirror works even without the remotes. (The vendor copies of
+  global-todo carry the same content; the live upstream now shows the literal
+  public origin URL in its docs instead of `{{PI_TODO_ORIGIN}}`.)
+
+## Personal-data inventory (agent-level files)
 
 | Location | Personal data | Status in this repo |
 |---|---|---|
 | `~/.pi/agent/SYSTEM.md` | phone number | vendored as `pi/SYSTEM.md` with `{{PI_NOTIFY_PHONE}}` — rendered by `scripts/render.sh` |
 | `~/.pi/agent/mcp.json` | HA long-lived JWT, the personal LAN hostname | vendored as `pi/mcp.json.template` — rendered by `scripts/render.sh` |
 | `~/.pi/agent/pi-imessage/config.json` | `meHandles` (phone + Apple ID email), `allowFrom` | never vendored; `config.example.json` + render.sh materialize it |
-| `~/code/pi-imessage` | your phone + Apple ID email in test fixtures, `.opencode/` scratch, dirty `state.md` | vendored sanitized into `pi/extensions/pi-imessage/` |
-| `~/code/splash-serve` | personal home-directory paths in README + `watchdog/watchdog.py`, a personal LaunchAgent label in the committed plist | not vendored (local-only); changes below |
-| `~/.pi/agent/skills/global-todo` (a private personal fork) | only the git origin URL | vendored with `{{PI_TODO_ORIGIN}}` in SKILL.md/README.md |
 | `~/.omlx/settings.json` | LAN hostname/IP aliases | not vendored; manual step (below) |
 | `~/.pi/agent/auth.json`, `models-store.json`, `mcp-cache.json` | provider keys / generated caches | **never vendored** — gitignored, regeneratable or secret |
-
-## pi-imessage (`~/code/pi-imessage`)
-
-**Current personal data**
-
-- `~/.pi/agent/pi-imessage/config.json` — `meHandles` (your phone + Apple ID
-  email) and `allowFrom` (the phone that may talk to it).
-- `test/fixtures.mjs`, `test/factory.test.mjs`, `test/db.test.mjs` — your real
-  phone number and Apple ID email in fixtures and assertions.
-- `.opencode/` — local agent scratch (`state.md`, `inspect-echo.mjs`); untracked/dirty.
-- `src/*.ts` — clean (all personal values come from the external config).
-
-**Changes required before publishing**
-
-1. Sanitize the three test files exactly like the vendored copy
-   (`pi/extensions/pi-imessage/test/`): your phone → `+15551230001`, your
-   Apple ID email → `test@example.com`, and the formatted phone variant →
-   `+155-5123-0001` (diff the vendored tests against your tree to get every occurrence).
-2. Add a `.gitignore`: `node_modules/`, `.opencode/`, `state/`.
-3. Commit a `config.example.json` (the vendored one) instead of any real config.
-4. Keep the live config in `~/.pi/agent/pi-imessage/config.json` (outside the repo).
-5. Dev dependency `@earendil-works/pi-coding-agent ^0.84.2` is older than the
-   live pi 1.3.0 but the extension runs against the installed pi's types; bump
-   it to `^1.3.0` at your convenience, not as a publication blocker.
-
-**How this repo consumes it:** `scripts/install.sh` clones
-`$PI_IMESSAGE_REPO` when set; otherwise it uses the vendored copy in
-`pi/extensions/pi-imessage/`. Either way it `npm install`s and symlinks
-`~/.pi/agent/extensions/pi-imessage`.
-
-## splash-serve (`~/code/splash-serve`)
-
-**Current personal data**
-
-- `README.md` — personal home-directory paths.
-- `watchdog/watchdog.py` — personal home-directory paths.
-- `watchdog/com.*.splash-watchdog.plist` — a *committed* personal LaunchAgent
-  label (the generic label `com.piagent.splash-watchdog` is what docs/04 documents).
-- Excluded by its `.gitignore` (keep it): `__pycache__/`, `*.log`, `PAUSE`, `watchdog/state.json`.
-
-**Changes required before publishing**
-
-1. Replace the personal home-directory paths with `$HOME`-style or `~` paths in `README.md` and `watchdog/watchdog.py`.
-2. Remove the personal plist from the repo (it is generated at install time);
-   if the watchdog label must be configurable, honor `SPLASH_WATCHDOG_LABEL`
-   (default `com.piagent.splash-watchdog`) in `watchdog.py`.
-3. Keep the existing `.gitignore` exclusions.
-
-**How this repo consumes it:** `scripts/install.sh` clones
-`$SPLASH_SERVE_REPO` when set and installs the launcher into `~/.local/bin`;
-otherwise it prints a pointer to this doc. The live machine keeps its personal
-label until the fork is published and re-installed.
-
-## global-todo / pi-todo (a private personal fork)
-
-**Current personal data:** only the git origin URL (the content itself is clean —
-the vendored copy in `pi/skills/global-todo/` proves it).
-
-**Two options:**
-
-1. **Publish a public fork** (recommended): push the skill to a public repo,
-   set `PI_TODO_ORIGIN` in `.env`. `scripts/install.sh` then clones it and the
-   15-minute sync loop keeps it current (it `git pull`s origin/main).
-2. **Keep it private:** leave `PI_TODO_ORIGIN` empty. `scripts/install.sh`
-   installs the vendored copy, which has no git metadata, so the loop's sync
-   is a silent no-op — and it rewrites the LaunchAgent to `PI_TODO_SYNC=0`.
 
 ## oMLX host aliases
 
@@ -97,13 +105,22 @@ machine-specific and never vendored. On a mirror, write them by hand:
 (docs/01 documents how the aliases feed the oMLX provider; on this machine the
 aliases are not even consumed by pi, since `models.json` has no `omlx` provider.)
 
-## Pre-publish checklist (run in each upstream repo)
+## Reusable pre-publish checklist (run in each upstream repo)
 
 ```sh
-# run in each upstream repo — patterns are yours: home dir name, GitHub user,
-# email address, phone digits, LAN hostnames, and token prefixes
-git grep -nE '<your-user>|<your-email>|<phone-digits>|<lan-host>|eyJ|/Users/[^/~]' -- ':!*.lock' || echo clean
+# patterns are yours: GitHub user, email, home directory, phone digits,
+# LAN hostnames, token prefixes, personal launchd labels
+git grep -nE '<your-user>|<your-email>|/Users/<you>|<phone-digits>|<lan-host>|eyJ|com\.<you>\.' -- ':!*.lock' || echo clean
+# then the full history, not just HEAD:
+git log -p --all | grep -nE '<same patterns>' || echo clean
 ```
 
-Any hit must be justified (a public name like `paperniuk` is fine; anything
-matching the patterns above is not).
+Any hit must be justified: a public name (e.g. `paperniuk`) or the repo's own
+public URL is fine; anything matching your identity patterns is not, and the
+history must be rewritten before making the repo public. Remember that a
+successful `https` clone is **not** proof of public visibility (credential
+helpers will fetch private repos) — check `gh api repos/<owner>/<name> --jq .visibility`.
+
+Note: live *rendered* files on the source machine (installed launchd plists,
+`~/.pi/agent/mcp.json`, rendered configs) will contain real values — that is
+expected and fine as long as those files are gitignored and never committed.

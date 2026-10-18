@@ -83,7 +83,7 @@ the same shared format (`✅ … done` / `⚠️ … failed`) from `scripts/noti
 
 ## Development
 
-Edit in `~/code/pi-todo` (origin = `{{PI_TODO_ORIGIN}}`).
+Edit in `~/code/pi-todo` (origin = https://github.com/tragdor85/pi-todo).
 After `git push origin main`, the skill dir picks up the change on the next
 loop run (≤ 15 min) (or run `node scripts/loop.mjs --force` to test immediately).
 

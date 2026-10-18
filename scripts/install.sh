@@ -130,7 +130,7 @@ if [ "$SKIP_SPLASH" != 1 ]; then
       echo "  ! splash-serve checkout has no splash-serve launcher — check the repo"
     fi
   else
-    echo "  (no SPLASH_SERVE_REPO — skip; splash-serve is not public yet, see docs/07-sanitizing-local-repos.md)"
+    echo "  (no SPLASH_SERVE_REPO — skip; set it in .env to install the launcher + watchdog)"
   fi
 else
   say "7/7 splash-serve (skipped)"

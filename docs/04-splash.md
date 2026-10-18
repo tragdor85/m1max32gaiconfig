@@ -65,7 +65,7 @@ test: `./splash pi` from the repo.
 ## Running it: `splash-serve` + watchdog
 
 The raw `splash serve` command works, but this machine runs it through a small
-**local-only launcher repo**, `~/code/splash-serve` (no remote — see
+launcher repo, `~/code/splash-serve` (public: `https://github.com/tragdor85/splash-serve`; sanitization playbook in
 `docs/07-sanitizing-local-repos.md`). It is one operational unit: launcher + watchdog.
 
 ### `splash-serve` (the launcher)

@@ -80,11 +80,13 @@ headless runs receive.
   `PI_TODO_SYNC` (checkout auto-sync), `PI_TODO_SKIP_BUSY_CHECK`.
 - **Install**: `sh pi/skills/global-todo/install-loop.sh` (`--remove` uninstalls).
 
-Provenance: the skill directory is a checkout of a **private** dev repo
-(`{{PI_TODO_ORIGIN}}` in the vendored SKILL.md; `git pull`-synced each loop run).
-When published, the checkout's `origin` must point at the published repo or
-`PI_TODO_SYNC=0` must be set; this config repo vendors the full skill content so
-nothing depends on the private one.
+Provenance: the skill directory is a checkout of a **public** dev repo
+(`https://github.com/tragdor85/pi-todo`, `git pull`-synced each loop run).
+`scripts/install.sh` clones it when `PI_TODO_ORIGIN` is set (the default in
+`.env.example` points at the public repo); with the variable empty it falls back
+to the vendored copy in `pi/skills/global-todo/` and sets `PI_TODO_SYNC=0`.
+The live machine's checkout has an SSH remote (`git@github.com:...`); the
+installed skill dir is a copy and has no remote at all.
 
 ## `pi/agents/admin.md` (vendored, dormant)
 
