@@ -120,9 +120,9 @@ minutes without a request the model leaves RAM and the next request pays the rel
 
 Install: `sh watchdog/install.sh` (copies the plist to `~/Library/LaunchAgents`,
 `--remove` uninstalls); `python3 watchdog/watchdog.py --pause/--resume` to suspend
-restarting. The installed plist here is `com.piagent.splash-watchdog`; the LaunchAgent
-label is personal — `docs/07` documents the generic
-(`com.piagent.splash-watchdog`) version.
+restarting. The label is set in the plist (`com.piagent.splash-watchdog` in the
+generic version; `docs/07` documents the rename from this machine's personal
+label).
 
 ### Day-2 operations
 
