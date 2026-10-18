@@ -30,10 +30,10 @@ const cfgmod = jiti("../src/config.ts");
   assert.equal(cfgmod.normHandle("  +1 555 1234567 "), "+15551234567");
   assert.equal(cfgmod.normSet(["A B"]).has("ab"), true);
   assert.equal(cfgmod.sameHandle("+155-5123-0001", "+15551230001"), true); // last-10 match
-  assert.equal(cfgmod.sameHandle("4353748609", SELF_PHONE), true); // digits-only match
+  assert.equal(cfgmod.sameHandle("5551230001", SELF_PHONE), true); // digits-only match
   assert.equal(cfgmod.sameHandle("a@x.com", "a@y.com"), false);
   assert.equal(cfgmod.sameHandle("5551234567", PEER_PHONE), true); // digits-only, no + / country code
-  assert.equal(cfgmod.sameHandle(SELF_EMAIL, "SPHINXQQG@GMAIL.COM"), true);
+  assert.equal(cfgmod.sameHandle(SELF_EMAIL, "TEST@EXAMPLE.COM"), true);
 }
 
 /* db core */
