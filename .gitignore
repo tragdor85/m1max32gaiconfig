@@ -16,4 +16,11 @@ pi/mcp-cache.json
 pi/bin/
 pi/npm/node_modules/
 pi/extensions/*
+!pi/extensions/pi-imessage
+!pi/extensions/pi-imessage/
+!pi/extensions/pi-imessage/**
 !pi/extensions/.gitkeep
+# generated/personal subdirs of the vendored pi-imessage copy
+pi/extensions/pi-imessage/node_modules/
+pi/extensions/pi-imessage/.opencode/
+pi/extensions/pi-imessage/state/

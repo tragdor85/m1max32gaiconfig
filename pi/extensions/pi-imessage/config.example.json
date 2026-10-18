@@ -1,0 +1,6 @@
+{
+  "meHandles": ["{{PI_IMESSAGE_ME_PHONE}}", "{{PI_IMESSAGE_ME_EMAIL}}"],
+  "allowFrom": ["{{PI_IMESSAGE_ALLOW_FROM}}"],
+  "pollingEnabled": true,
+  "pollIntervalMs": 1000
+}
