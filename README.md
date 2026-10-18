@@ -30,7 +30,9 @@ personal-free files:
 - `pi/settings.json`, `pi/permissions.json`, `pi/models.json` — as-is.
 - `pi/SYSTEM.md`, `pi/mcp.json.template` — contain `{{PLACEHOLDER}}` values;
   `scripts/render.sh` fills them from `.env`.
-- `pi/agents/admin.md` — the global subagent definition.
+- `pi/agents/admin.md` — a global subagent definition vendored as
+  forward-looking config; pi 1.3.0 does not load user subagent markdown files, so
+  it is inert until pi adds that feature (docs/05).
 
 Generated or personal files (`sessions/`, `todos/`, `auth.json`, `models-store.json`,
 `mcp-cache.json`, token files) are never committed — see `docs/02-pi.md` for the full
