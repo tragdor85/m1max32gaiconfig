@@ -1,0 +1,83 @@
+{
+  "providers": {
+    "splash": {
+      "api": "openai-completions",
+      "apiKey": "splash-local",
+      "baseUrl": "http://127.0.0.1:8000/v1",
+      "models": [
+        {
+          "contextWindow": 74000,
+          "cost": {
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "input": 0,
+            "output": 0
+          },
+          "id": "mlx-community/Qwen3.8-27B-4bit",
+          "input": [
+            "text",
+            "image"
+          ],
+          "maxTokens": 56614,
+          "name": "mlx-community/Qwen3.8-27B-4bit",
+          "reasoning": true,
+          "thinkingLevelMap": {
+            "off": "none",
+            "low": "low",
+            "medium": "medium",
+            "high": "high",
+            "xhigh": "xhigh"
+          }
+        },
+        {
+          "contextWindow": 64000,
+          "cost": {
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "input": 0,
+            "output": 0
+          },
+          "id": "mlx-community/Qwen3.6-35B-A3B-4bit",
+          "input": [
+            "text",
+            "image"
+          ],
+          "maxTokens": 56614,
+          "name": "mlx-community/Qwen3.6-35B-A3B-4bit",
+          "reasoning": true,
+          "thinkingLevelMap": {
+            "off": null,
+            "low": "low",
+            "medium": "medium",
+            "high": "xhigh",
+            "xhigh": "xhigh"
+          }
+        },
+        {
+          "contextWindow": 64000,
+          "cost": {
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "input": 0,
+            "output": 0
+          },
+          "id": "prism-ml/Ternary-Bonsai-2-27B-gguf:PQ2_0",
+          "input": [
+            "text",
+            "image"
+          ],
+          "maxTokens": 56614,
+          "name": "prism-ml/Ternary-Bonsai-2-27B-gguf:PQ2_0",
+          "reasoning": true,
+          "thinkingLevelMap": {
+            "off": null,
+            "low": "low",
+            "medium": "medium",
+            "high": "xhigh",
+            "xhigh": "xhigh"
+          }
+        }
+      ]
+    }
+  }
+}
