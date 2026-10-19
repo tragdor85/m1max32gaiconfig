@@ -12,7 +12,6 @@ them into `npm/node_modules`.
 | Package (installed version) | What it does | State |
 |---|---|---|
 | `@firstpick/pi-extension-git-footer-status@0.5.5` | Replaces the footer with git status, token/context usage, model telemetry | active |
-| `pi-compaction-model@0.1.0` | Lets native compaction run on a *different* model than the session model | installed, **unconfigured** — settings has no `compactionModel` key, so compaction runs on the session model (see "known drift") |
 | `pi-mcp-adapter@5.3.1` | Exposes MCP servers to pi as native tools | active — the only MCP route (built-in MCP is disabled, see `docs/06`) |
 
 The three registry packages are in the vendored [`pi/npm/package.json`](../pi/npm/package.json)

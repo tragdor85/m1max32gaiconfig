@@ -57,9 +57,6 @@ starve the context window.
   `enabledModels: [the three]` — the picker shows **only local models**; cloud models
   from the auto-generated catalog are hidden (a cloud key in `auth.json` is an escape
   hatch you opt into by editing `enabledModels`, not the default).
-- `pi-compaction-model` extension (`docs/05-extensions.md`): allows compaction to run on
-  a dedicated model; here compaction uses the active model with the `settings.json`
-  overrides above.
 - `models-store.json` is pi's **auto-generated** cache of the built-in provider catalog
   (~80 KB, contains the `anthropic`/`huggingface` registry entries). Never edit it by
   hand and never commit it — pi rewrites it.

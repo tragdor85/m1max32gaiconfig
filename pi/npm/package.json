@@ -3,7 +3,6 @@
   "private": true,
   "dependencies": {
     "@firstpick/pi-extension-git-footer-status": "^0.5.5",
-    "pi-compaction-model": "^0.1.0",
     "pi-mcp-adapter": "^5.3.1"
   }
 }
