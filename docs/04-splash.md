@@ -37,8 +37,8 @@ brew install python@3.14 uv
 # 2. Engine. Two options:
 #    a) prebuilt M1/M2 binary from the fork's releases page, or
 #    b) source (what this machine runs):
-git clone git@github.com:paperniuk/splash.git ~/code/splash
-cd ~/code/splash
+git clone git@github.com:paperniuk/splash.git $CODE_DIR/splash
+cd $CODE_DIR/splash
 git checkout 1.3.2-m1.1            # the pinned version
 make build                         # Metal engine → build/splash; uv .venv (a few minutes)
 
@@ -65,7 +65,7 @@ test: `./splash pi` from the repo.
 ## Running it: `splash-serve` + watchdog
 
 The raw `splash serve` command works, but this machine runs it through a small
-launcher repo, `~/code/splash-serve` (public: `https://github.com/tragdor85/splash-serve`; sanitization playbook in
+launcher repo, `$CODE_DIR/splash-serve` (public: `https://github.com/tragdor85/splash-serve`; sanitization playbook in
 `docs/07-sanitizing-local-repos.md`). It is one operational unit: launcher + watchdog.
 
 ### `splash-serve` (the launcher)
@@ -134,14 +134,14 @@ curl -s http://127.0.0.1:8000/status | python3 -m json.tool | head
 curl -s http://127.0.0.1:8000/v1/models
 
 # stop (the lock file records the live pid)
-kill "$(cat "$HOME/code/splash/build/runtime/serve-8000.lock" | \
+kill "$(cat "$CODE_DIR/splash/build/runtime/serve-8000.lock" | \
   python3 -c 'import json,sys; print(json.load(sys.stdin)["pid"])')"
 
 # start / switch model
 tmux send-keys -t splash 'splash-serve 35B' CRLF
 
 # what the watchdog has done lately
-tail -20 ~/code/splash-serve/watchdog/watchdog.log
+tail -20 $CODE_DIR/splash-serve/watchdog/watchdog.log
 ```
 
 ## Why the server shape is what it is

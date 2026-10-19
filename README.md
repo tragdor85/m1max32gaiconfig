@@ -38,8 +38,8 @@ Generated or personal files (`sessions/`, `todos/`, `auth.json`, `models-store.j
 ## Mirroring the setup
 
 ```bash
-git clone <this-repo> ~/code/m1max32gaiconfig && cd m1max32gaiconfig
-cp .env.example .env       # then edit: phone, repo URLs, ports
+git clone <this-repo> $CODE_DIR/m1max32gaiconfig && cd m1max32gaiconfig
+cp .env.example .env       # then edit: phone, repo URLs, CODE_DIR if needed
 scripts/install.sh         # installs pi, renders config, wires extensions/MCP/splash-serve
 ```
 

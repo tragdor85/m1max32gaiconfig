@@ -26,6 +26,16 @@ while [ $# -gt 0 ]; do
 done
 [ -f "$ENV_FILE" ] || { echo "no .env (copy .env.example and fill it first)" >&2; exit 1; }
 
+# Resolve CODE_DIR (default: $HOME/code) — available to child processes.
+export CODE_DIR="$(env_get CODE_DIR)"
+[ -n "$CODE_DIR" ] || CODE_DIR="$HOME/code"
+
+default_path() { # $1=env_var_name $2=default (relative to CODE_DIR)
+  local v
+  v="$(env_get "$1")"
+  [ -n "$v" ] && echo "$v" || echo "$CODE_DIR/$2"
+}
+
 env_get() { # KEY -> value (unquoted) or empty
   local v
   v="$(grep -E "^$1=" "$ENV_FILE" | tail -1 | cut -d= -f2- || true)"
@@ -69,17 +79,19 @@ say "4/7 render"
 if [ "$SKIP_IMESSAGE" != 1 ]; then
   say "5/7 pi-imessage"
   IM_REPO="$(env_get PI_IMESSAGE_REPO)"
+  local im_dest
+  im_dest="$(default_path PI_IMESSAGE_REPO pi-imessage)"
   if [ -n "$IM_REPO" ]; then
-    if [ ! -d "$HOME/code/pi-imessage/.git" ]; then
-      git clone "$IM_REPO" "$HOME/code/pi-imessage"
+    if [ ! -d "$im_dest/.git" ]; then
+      git clone "$IM_REPO" "$im_dest"
     fi
-    SRC="$HOME/code/pi-imessage"
+    SRC="$im_dest"
   else
     # vendor copy from this repo (sanitized tests + config.example)
-    mkdir -p "$HOME/code"
-    rm -rf "$HOME/code/pi-imessage"
-    cp -R "$REPO/pi/extensions/pi-imessage" "$HOME/code/pi-imessage"
-    SRC="$HOME/code/pi-imessage"
+    rm -rf "$im_dest"
+    mkdir -p "$(dirname "$im_dest")"
+    cp -R "$REPO/pi/extensions/pi-imessage" "$im_dest"
+    SRC="$im_dest"
     echo "  (no PI_IMESSAGE_REPO — used the vendored copy from this repo)"
   fi
   (cd "$SRC" && npm install --no-audit --no-fund)
@@ -117,14 +129,16 @@ fi
 if [ "$SKIP_SPLASH" != 1 ]; then
   say "7/7 splash-serve"
   SS_REPO="$(env_get SPLASH_SERVE_REPO)"
+  local ss_dest
+  ss_dest="$(default_path SPLASH_SERVE_REPO splash-serve)"
   if [ -n "$SS_REPO" ]; then
-    [ -d "$HOME/code/splash-serve/.git" ] || git clone "$SS_REPO" "$HOME/code/splash-serve"
-    if [ -f "$HOME/code/splash-serve/splash-serve" ]; then
+    [ -d "$ss_dest/.git" ] || git clone "$SS_REPO" "$ss_dest"
+    if [ -f "$ss_dest/splash-serve" ]; then
       mkdir -p "$HOME/.local/bin"
       backup "$HOME/.local/bin/splash-serve"
-      cp "$HOME/code/splash-serve/splash-serve" "$HOME/.local/bin/splash-serve"
+      cp "$ss_dest/splash-serve" "$HOME/.local/bin/splash-serve"
       chmod +x "$HOME/.local/bin/splash-serve"
-      ln -sfn "$HOME/code/splash-serve/splash-serve-homebrew" "$HOME/.local/bin/splash-serve-homebrew" 2>/dev/null || true
+      ln -sfn "$ss_dest/splash-serve-homebrew" "$HOME/.local/bin/splash-serve-homebrew" 2>/dev/null || true
       echo "  installed ~/.local/bin/splash-serve (+ homebrew alias)"
     else
       echo "  ! splash-serve checkout has no splash-serve launcher — check the repo"

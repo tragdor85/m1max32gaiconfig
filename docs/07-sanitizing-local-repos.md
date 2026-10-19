@@ -5,8 +5,8 @@ three have been **sanitized, history-rewritten, and published**:
 
 | Local repo | Public remote | Personal data found | History treatment |
 |---|---|---|---|
-| `~/code/pi-imessage` | `https://github.com/tragdor85/pi-imessage` | real phone + Apple ID email in test fixtures; dirty `.opencode/` scratch | full rewrite (values replaced in every commit) |
-| `~/code/splash-serve` | `https://github.com/tragdor85/splash-serve` | personal home-directory paths; personal LaunchAgent label in the committed plist + `install.sh` | full rewrite (paths → `$HOME`, label → generic, plist → template) |
+| `$CODE_DIR/pi-imessage` | `https://github.com/tragdor85/pi-imessage` | real phone + Apple ID email in test fixtures; dirty `.opencode/` scratch | full rewrite (values replaced in every commit) |
+| `$CODE_DIR/splash-serve` | `https://github.com/tragdor85/splash-serve` | personal home-directory paths; personal LaunchAgent label in the committed plist + `install.sh` | full rewrite (paths → `$HOME`, label → generic, plist → template) |
 | `~/.pi/agent/skills/global-todo` | `https://github.com/tragdor85/pi-todo` (existing private repo, made public) | old example path + LaunchAgent label in **history**; old author identity | full rewrite (values + author/committer metadata) |
 
 Verification for each: `git log -p --all` grepped for the personal patterns
@@ -31,7 +31,7 @@ scanned the same way. Tests re-run green after the rewrites (pi-imessage
 **splash-serve**
 
 - `README.md`, `watchdog/watchdog.py`: personal home paths → `$HOME`/`~`
-  (the watchdog's default cwd is now `~/code/splash`, expanduser'd).
+  (the watchdog's default cwd is now `$CODE_DIR/splash`, expanduser'd).
 - `watchdog/install.sh`: label overridable via `SPLASH_WATCHDOG_LABEL`
   (default `com.piagent.splash-watchdog`); the tracked plist is a template with
   `{{HOME}}`/`{{LABEL}}` placeholders, rendered by `sed` at install time

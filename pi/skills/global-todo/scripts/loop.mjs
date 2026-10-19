@@ -234,7 +234,7 @@ async function modelServerBusy() {
 /* --- keep the skill in sync with the dev repo ------------------------- */
 
 /**
- * Development happens in ~/code/pi-todo (origin = the GitHub repo). Each
+ * Development happens in $CODE_DIR/pi-todo (origin = the GitHub repo). Each
  * each run pulls the skill checkout forward from origin/main so fixes
  * deployed there take effect. Skipped when the checkout is dirty, the pull
  * would not be a fast-forward, or PI_TODO_SYNC=0.

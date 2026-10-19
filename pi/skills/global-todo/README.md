@@ -67,10 +67,10 @@ tail -f $HOME/.pi/agent/todos/loop.log
 
 ## Development
 
-The dev repo lives at `~/code/pi-todo` (origin = https://github.com/tragdor85/pi-todo).
+The dev repo lives at `$CODE_DIR/pi-todo` (origin = https://github.com/tragdor85/pi-todo).
 
 ```bash
-cd ~/code/pi-todo
+cd $CODE_DIR/pi-todo
 # edit, commit, push
 git push origin main
 ```

@@ -52,7 +52,8 @@ render_one() { # $1=src $2=dst
     val="${val%\"}"; val="${val#\"}"
     [ -n "$val" ] || continue
     # expand $HOME / ${HOME} (the adapter & consumers don't; .env values may carry them)
-    val="$(printf '%s' "$val" | sed -e "s|\${HOME}|$HOME|g" -e "s|\$HOME|$HOME|g")"
+    # also expand $CODE_DIR / ${CODE_DIR} (default: $HOME/code) — must come after HOME expansion.
+    val="$(printf '%s' "$val" | sed -e "s|\${HOME}|$HOME|g" -e "s|\$HOME|$HOME|g" -e "s|\${CODE_DIR}|$CODE_DIR|g" -e "s|\$CODE_DIR|$CODE_DIR|g")"
     # sed-safe: escape & \ / in the replacement
     val_esc="$(printf '%s' "$val" | sed -e 's/[\\&/]/\\&/g')"
     if grep -q "{{${key}}}" "$work"; then
