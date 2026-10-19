@@ -85,21 +85,6 @@ to the vendored copy in `pi/skills/global-todo/` and sets `PI_TODO_SYNC=0`.
 The live machine's checkout has an SSH remote (`git@github.com:...`); the
 installed skill dir is a copy and has no remote at all.
 
-## Known drift: legacy compaction keys in `settings.json`
-
-The vendored `pi/settings.json` carries per-model compaction budgets as
-`compaction.reserveTokens.models` / `compaction.keepRecentTokens.models` — a shape
-from the pi 0.84 era. pi **1.3.0's schema reads `compaction.modelOverrides`**
-(a record keyed by `provider/modelId`, per the native
-[compaction docs](https://github.com/earendil-works/pi/blob/main/packages/coding-agent/docs/compaction.md)),
-and TypeBox object schemas silently ignore the dotted legacy keys. Consequence on
-this machine: the intended per-model budgets (25600/20480) are **not active** —
-every model compacts with the global 16384 reserve / 6000 keep-recent, on the
-session model. The fix is a one-shot rewrite to `compaction.modelOverrides` (+ add
-a `compactionModel` key if Qwen3.6-35B compaction is actually wanted). This repo
-mirrors the *live* file as found; apply the migration on the machine, then bump
-the vendored copy.
-
 ## Deliberately not here
 
 - **Builtin MCP** — disabled (`settings.json: extensions: ["-builtin:mcp"]`); the
