@@ -84,14 +84,3 @@ to the vendored copy in `pi/skills/global-todo/` and sets `PI_TODO_SYNC=0`.
 The live machine's checkout has an SSH remote (`git@github.com:...`); the
 installed skill dir is a copy and has no remote at all.
 
-## Deliberately not here
-
-- **Builtin MCP** — enabled (the agent's `mcp` gateway handles servers natively;
-  no adapter needed, see `docs/06`).
-- **Unused provider extensions** — the live `~/.pi/agent/npm/package.json` still
-  declares two installed-but-unused model-provider packages; the vendored
-  [`pi/npm/package.json`](../pi/npm/package.json) omits them. The only model provider
-  in `models.json` is local Splash.
-- **`~/.agents/` subagent definitions** (`admin.md`) — pi 1.3.0 has no user-subagent
-  loader, so none are vendored.
-- No `~/.agents/skills/` content: the only user skill lives in `~/.pi/agent/skills/`.
