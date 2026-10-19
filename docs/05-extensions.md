@@ -40,8 +40,8 @@ Vendored in [`pi/extensions/pi-imessage/`](../pi/extensions/pi-imessage/) (sourc
 tests; no `node_modules`, no state dir). The **config is not vendored** — it holds
 personal handles. Use the sanitized template
 [`config.example.json`](../pi/extensions/pi-imessage/config.example.json) and fill
-`{{PI_IMESSAGE_ME_PHONE}}` / `{{PI_IMESSAGE_ME_EMAIL}}` / `{{PI_IMESSAGE_ALLOW_FROM}}`
-from your `.env` (block “Local-only repos”) when mirroring:
+`{{PI_NOTIFY_PHONE}}` / `{{PI_IMESSAGE_ME_EMAIL}}`
+from your `.env` (block "Identity") when mirroring:
 
 ```json
 {
@@ -52,8 +52,8 @@ from your `.env` (block “Local-only repos”) when mirroring:
 }
 ```
 
-(placeholder names `{{PI_IMESSAGE_ME_PHONE}}` / `{{PI_IMESSAGE_ME_EMAIL}}` /
-`{{PI_IMESSAGE_ALLOW_FROM}}` map to the `.env` block “Local-only repos”).
+(placeholder names `{{PI_NOTIFY_PHONE}}` / `{{PI_IMESSAGE_ME_EMAIL}}`
+map to the `.env` block "Identity".)
 
 Install: `npm install` in the directory, then point pi at it — a symlink
 `~/.pi/agent/extensions/pi-imessage -> <repo>/pi/extensions/pi-imessage` is how
