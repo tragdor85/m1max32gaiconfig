@@ -2,7 +2,6 @@
   "name": "pi-extensions",
   "private": true,
   "dependencies": {
-    "@firstpick/pi-extension-git-footer-status": "^0.5.5",
-    "pi-mcp-adapter": "^5.3.1"
+    "@firstpick/pi-extension-git-footer-status": "^0.5.5"
   }
 }

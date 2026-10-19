@@ -12,7 +12,6 @@ them into `npm/node_modules`.
 | Package (installed version) | What it does | State |
 |---|---|---|
 | `@firstpick/pi-extension-git-footer-status@0.5.5` | Replaces the footer with git status, token/context usage, model telemetry | active |
-| `pi-mcp-adapter@5.3.1` | Exposes MCP servers to pi as native tools | active — the only MCP route (built-in MCP is disabled, see `docs/06`) |
 
 The three registry packages are in the vendored [`pi/npm/package.json`](../pi/npm/package.json)
 (version ranges as installed). `pi-imessage` is a local source extension (next).
@@ -87,8 +86,8 @@ installed skill dir is a copy and has no remote at all.
 
 ## Deliberately not here
 
-- **Builtin MCP** — disabled (`settings.json: extensions: ["-builtin:mcp"]`); the
-  pi-mcp-adapter package is the single MCP route (`docs/06-mcp.md`).
+- **Builtin MCP** — enabled (the agent's `mcp` gateway handles servers natively;
+  no adapter needed, see `docs/06`).
 - **Unused provider extensions** — the live `~/.pi/agent/npm/package.json` still
   declares two installed-but-unused model-provider packages; the vendored
   [`pi/npm/package.json`](../pi/npm/package.json) omits them. The only model provider

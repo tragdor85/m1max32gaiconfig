@@ -3,8 +3,7 @@
   "theme": "dark",
   "transport": "auto",
   "packages": [
-    "npm:@firstpick/pi-extension-git-footer-status",
-    "npm:pi-mcp-adapter"
+    "npm:@firstpick/pi-extension-git-footer-status"
   ],
   "defaultProvider": "splash",
   "defaultModel": "splash/mlx-community/Qwen3.8-27B-4bit",
@@ -50,7 +49,5 @@
     "maxRetries": 6,
     "baseDelayMs": 20000
   },
-  "extensions": [
-    "-builtin:mcp"
-  ]
+  "extensions": []
 }
