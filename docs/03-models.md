@@ -1,10 +1,10 @@
 # 03 — Models in use
 
-pi gets its models from four places: the built-in provider catalog (auto-generated
-`models-store.json`), custom providers in `models.json`, and provider-discovery
-extensions (oMLX, LM Studio). On this machine the *live* set is three local Splash
-models; everything else is dormant by design — cloud keys exist but cloud models are
-excluded from the picker.
+pi gets its models from the built-in provider catalog (auto-generated
+`models-store.json`) plus custom providers in `models.json`. On this machine there is
+exactly one custom provider — local Splash with three models (`docs/04-splash.md`).
+Cloud keys may exist in personal `auth.json`, but cloud models are excluded from the
+picker by `enabledModels` — the environment is local-only by design.
 
 ## Live model table
 
@@ -13,8 +13,6 @@ excluded from the picker.
 | `splash` | `mlx-community/Qwen3.8-27B-4bit` | 74 K | local Splash, `127.0.0.1:8000` | **default model — the brain** |
 | `splash` | `mlx-community/Qwen3.6-35B-A3B-4bit` | 64 K | local Splash | available (fast hybrid: 35 B total / ~3 B active) |
 | `splash` | `prism-ml/Ternary-Bonsai-2-27B-gguf:PQ2_0` | 64 K | local Splash | available (ternary-quant, lightest RAM) |
-| `omlx` (auto-discovered) | *whatever the oMLX app has loaded* | — | oMLX app, `127.0.0.1:8089` | extension active, model dir empty right now |
-| `lmstudio` | — | — | LM Studio, `127.0.0.1:1234` | dormant (no models installed) |
 | cloud (`anthropic`, `openai`, `huggingface` catalog) | — | — | cloud | keys in personal `auth.json`; **excluded from picker** via `enabledModels` |
 
 ## The `splash` provider (`pi/models.json`, vendored as-is)
@@ -65,25 +63,6 @@ starve the context window.
 - `models-store.json` is pi's **auto-generated** cache of the built-in provider catalog
   (~80 KB, contains the `anthropic`/`huggingface` registry entries). Never edit it by
   hand and never commit it — pi rewrites it.
-
-## oMLX (local MLX server app)
-
-- **App**: oMLX v0.6.4 (`/Applications/oMLX.app`) — a local, Ollama-style MLX serving
-  app; an OpenAI-compatible API on `127.0.0.1:8089` (config: `~/.omlx/settings.json`).
-- **pi side**: the `@rolemodel/pi-omlx` extension (`docs/05-extensions.md`)
-  auto-discovers the endpoint, registers whatever models are loaded, and adds an
-  `/omlx-models` command to show/hide them.
-- **State**: `~/.omlx/models/` is empty right now, so the extension registers nothing;
-  a `gemma-4-26B-A4B-it-qat-4bit` profile exists in `~/.omlx/model_profiles.json` for
-  when a model is loaded. (The app's `server_aliases` in `settings.json` name this
-  machine for other LAN clients — a personal value; set your own, don't copy it.)
-
-## LM Studio (dormant)
-
-`~/.lmstudio/` exists with an empty models dir; the `pi-lmstudio` extension
-(`docs/05-extensions.md`) is installed but nothing is served, so it registers no models.
-Kept around as the option for non-MLX-quirky models; remove the extension if you never
-use it.
 
 ## Cloud keys (personal — never committed)
 

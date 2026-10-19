@@ -12,13 +12,11 @@ them into `npm/node_modules`.
 | Package (installed version) | What it does | State |
 |---|---|---|
 | `@firstpick/pi-extension-git-footer-status@0.5.5` | Replaces the footer with git status, token/context usage, model telemetry | active |
-| `@rolemodel/pi-omlx@0.0.2` | Model provider + auto-discovery for [oMLX](https://github.com/cadamsd1601/oMLX); UI to toggle model visibility | installed, **dormant** — no `omlx` provider in `models.json` (oMLX runs, see `docs/03`) |
 | `pi-compaction-model@0.1.0` | Lets native compaction run on a *different* model than the session model | installed, **unconfigured** — settings has no `compactionModel` key, so compaction runs on the session model (see "known drift") |
-| `pi-lmstudio@1.5.0` | Model provider for LM Studio | installed, **unused** (kept for ad-hoc use; no `lmstudio` provider in `models.json`) |
 | `pi-mcp-adapter@5.3.1` | Exposes MCP servers to pi as native tools | active — the only MCP route (built-in MCP is disabled, see `docs/06`) |
 
-All five in the vendored [`pi/npm/package.json`](../pi/npm/package.json) (version
-ranges as installed). `pi-imessage` is a local source extension (next).
+The three registry packages are in the vendored [`pi/npm/package.json`](../pi/npm/package.json)
+(version ranges as installed). `pi-imessage` is a local source extension (next).
 
 ## `pi-imessage` — local source extension (vendored)
 
@@ -88,20 +86,6 @@ to the vendored copy in `pi/skills/global-todo/` and sets `PI_TODO_SYNC=0`.
 The live machine's checkout has an SSH remote (`git@github.com:...`); the
 installed skill dir is a copy and has no remote at all.
 
-## `pi/agents/admin.md` (vendored, dormant)
-
-A subagent definition (frontmatter: `name: admin`, tools, a model override,
-`systemPromptMode: replace`) for delegating *agent-environment meta-work*
-(SYSTEM.md edits, settings/permissions tuning) to a small local model, so the
-main session stays free of config yak-shaving.
-
-**pi 1.3.0 has no user-subagent loader** (it loads skills, prompt templates,
-themes, and context files — no `~/.agents/*.md` agent definitions), so this file
-is **inert** until pi ships subagents or another agent on the machine adopts the
-format. It's vendored as forward-looking config, not live behavior: the routing
-rules for it in `SYSTEM.md` must be treated as aspirational until `subagent`
-tooling exists.
-
 ## Known drift: legacy compaction keys in `settings.json`
 
 The vendored `pi/settings.json` carries per-model compaction budgets as
@@ -121,7 +105,10 @@ the vendored copy.
 
 - **Builtin MCP** — disabled (`settings.json: extensions: ["-builtin:mcp"]`); the
   pi-mcp-adapter package is the single MCP route (`docs/06-mcp.md`).
-- **LM Studio / Ollama extensions/providers** — the `pi-lmstudio` package is
-  installed but no provider is declared in `models.json`; cloud/local alternatives
-  stay out of the picker on purpose.
+- **Unused provider extensions** — the live `~/.pi/agent/npm/package.json` still
+  declares two installed-but-unused model-provider packages; the vendored
+  [`pi/npm/package.json`](../pi/npm/package.json) omits them. The only model provider
+  in `models.json` is local Splash.
+- **`~/.agents/` subagent definitions** (`admin.md`) — pi 1.3.0 has no user-subagent
+  loader, so none are vendored.
 - No `~/.agents/skills/` content: the only user skill lives in `~/.pi/agent/skills/`.

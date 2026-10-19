@@ -38,6 +38,11 @@ render_one() { # $1=src $2=dst
   fi
   work="$(mktemp)"
   cp "$src" "$work"
+  if [ -f "$dst" ]; then
+    # force-overwrite: keep the previous live file (it may carry personal state
+    # the template doesn't know about, e.g. extra MCP servers)
+    cp "$dst" "$dst.bak-$(date +%Y%m%d-%H%M%S)"
+  fi
   # substitute every {{KEY}} whose KEY has a non-empty .env value
   local key val
   while IFS='=' read -r key val; do

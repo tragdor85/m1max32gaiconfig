@@ -88,22 +88,9 @@ because `refs/original` still references them — delete those refs first.
 | Location | Personal data | Status in this repo |
 |---|---|---|
 | `~/.pi/agent/SYSTEM.md` | phone number | vendored as `pi/SYSTEM.md` with `{{PI_NOTIFY_PHONE}}` — rendered by `scripts/render.sh` |
-| `~/.pi/agent/mcp.json` | HA long-lived JWT, the personal LAN hostname | vendored as `pi/mcp.json.template` — rendered by `scripts/render.sh` |
+| `~/.pi/agent/mcp.json` | none in the current template (all servers are local) | vendored as `pi/mcp.json.template` — rendered by `scripts/render.sh` |
 | `~/.pi/agent/pi-imessage/config.json` | `meHandles` (phone + Apple ID email), `allowFrom` | never vendored; `config.example.json` + render.sh materialize it |
-| `~/.omlx/settings.json` | LAN hostname/IP aliases | not vendored; manual step (below) |
 | `~/.pi/agent/auth.json`, `models-store.json`, `mcp-cache.json` | provider keys / generated caches | **never vendored** — gitignored, regeneratable or secret |
-
-## oMLX host aliases
-
-`~/.omlx/settings.json` contains your LAN hostname/IP aliases. They are
-machine-specific and never vendored. On a mirror, write them by hand:
-
-```json
-{ "hosts": { "omlx1": "<host-or-ip-of-machine-1>", "omlx2": "<host-or-ip-of-machine-2>" } }
-```
-
-(docs/01 documents how the aliases feed the oMLX provider; on this machine the
-aliases are not even consumed by pi, since `models.json` has no `omlx` provider.)
 
 ## Reusable pre-publish checklist (run in each upstream repo)
 

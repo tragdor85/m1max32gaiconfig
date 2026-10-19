@@ -5,7 +5,7 @@
 #
 # Order:
 #   1. prereq check (macOS / git / node / npm / pi)
-#   2. pi core: pi/{settings,permissions,models}.json -> ~/.pi/agent/
+#   2. pi core: pi/{settings,models}.json -> ~/.pi/agent/
 #   3. npm extensions: pi/npm/package.json -> ~/.pi/agent/npm/ + npm install
 #   4. render.sh (SYSTEM.md, pi-imessage config, mcp.json)
 #   5. pi-imessage: clone or vendor-copy the source, npm install, symlink into extensions/
@@ -46,7 +46,7 @@ command -v pi >/dev/null || echo "  ! pi not on PATH (brew/npm global) — steps
 say "2/7 pi core files"
 AGENT_DIR="$HOME/.pi/agent"
 mkdir -p "$AGENT_DIR"
-for f in settings.json permissions.json models.json; do
+for f in settings.json models.json; do
   backup "$AGENT_DIR/$f"
   cp "$REPO/pi/$f" "$AGENT_DIR/$f"
   echo "  installed $f"
@@ -143,6 +143,5 @@ Manual follow-ups:
   * pi: restart pi; /mcp reconnect if MCP errors appear
   * Safari: /Applications/Safari.app/Contents/MacOS/Safari --enable-automation (once)
   * Splash: see docs/04-splash.md (one-time: make build, make install per model)
-  * oMLX: if you use it, write ~/.omlx/settings.json host aliases manually (docs/01)
   * Verify: pi -p "say ok" ; mcp action=status ; splash-serve status
 NEXT

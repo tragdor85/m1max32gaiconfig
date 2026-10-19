@@ -15,11 +15,11 @@ unified memory, with the same extensions, skills, and MCP integrations.
 | Doc | Contents |
 |-----|----------|
 | [docs/01-system-specs.md](docs/01-system-specs.md) | Hardware, OS, and toolchain versions (what "M1 Max 32 G" means in practice). |
-| [docs/02-pi.md](docs/02-pi.md) | pi source, install, version, the `~/.pi/agent` config directory map, `settings.json`, `permissions.json`, and the global AGENTS.md (`SYSTEM.md`). |
-| [docs/03-models.md](docs/03-models.md) | Models in use: the Splash local provider, oMLX, LM Studio — and how they're configured in pi. |
+| [docs/02-pi.md](docs/02-pi.md) | pi source, install, version, the `~/.pi/agent` config directory map, `settings.json`, and the global AGENTS.md (`SYSTEM.md`). |
+| [docs/03-models.md](docs/03-models.md) | Models: the three local Splash models and how pi is configured for them. |
 | [docs/04-splash.md](docs/04-splash.md) | The M1/M2 Metal-kernel Splash fork, version, build, server config, `splash-serve` launcher, launchd watchdog, and day-2 operations. |
 | [docs/05-extensions.md](docs/05-extensions.md) | Every pi extension and skill in use: npm packages, the local iMessage extension, the global-todo skill, and what's deliberately disabled. |
-| [docs/06-mcp.md](docs/06-mcp.md) | The four MCP servers (Apple Music, Safari, Home Assistant, Sonos), token handling, and the env-var-templated `mcp.json`. |
+| [docs/06-mcp.md](docs/06-mcp.md) | The two MCP servers (Apple Music, Safari) and the env-var-templated `mcp.json`. |
 | [docs/07-sanitizing-local-repos.md](docs/07-sanitizing-local-repos.md) | How the three local repos (pi-imessage, splash-serve, pi-todo) were sanitized, history-rewritten, and published, plus a reusable pre-publish checklist. |
 
 ## Vendored config
@@ -27,12 +27,9 @@ unified memory, with the same extensions, skills, and MCP integrations.
 The `pi/` directory mirrors the layout of `~/.pi/agent/` with only the stable,
 personal-free files:
 
-- `pi/settings.json`, `pi/permissions.json`, `pi/models.json` — as-is.
+- `pi/settings.json`, `pi/models.json` — as-is.
 - `pi/SYSTEM.md`, `pi/mcp.json.template` — contain `{{PLACEHOLDER}}` values;
   `scripts/render.sh` fills them from `.env`.
-- `pi/agents/admin.md` — a global subagent definition vendored as
-  forward-looking config; pi 1.3.0 does not load user subagent markdown files, so
-  it is inert until pi adds that feature (docs/05).
 
 Generated or personal files (`sessions/`, `todos/`, `auth.json`, `models-store.json`,
 `mcp-cache.json`, token files) are never committed — see `docs/02-pi.md` for the full
@@ -42,7 +39,7 @@ directory map.
 
 ```bash
 git clone <this-repo> ~/code/m1max32gaiconfig && cd m1max32gaiconfig
-cp .env.example .env       # then edit: phone, tokens, repo URLs, ports
+cp .env.example .env       # then edit: phone, repo URLs, ports
 scripts/install.sh         # installs pi, renders config, wires extensions/MCP/splash-serve
 ```
 

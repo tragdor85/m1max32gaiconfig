@@ -7,15 +7,6 @@
     "safari-mcp": {
       "command": "{{SAFARI_MCP_BIN}}",
       "args": ["--mcp"]
-    },
-    "home-assistant": {
-      "url": "{{HOME_ASSISTANT_URL}}",
-      "headers": {
-        "Authorization": "Bearer {{HOME_ASSISTANT_TOKEN}}"
-      }
-    },
-    "sonos": {
-      "url": "{{SONOS_MCP_URL}}"
     }
   }
 }
