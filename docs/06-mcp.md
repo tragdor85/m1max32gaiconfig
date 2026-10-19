@@ -30,8 +30,8 @@ When the system knows about a server, tools are namespaced `mcp__<server>__<tool
 ## Server configuration
 
 Both servers are local stdio binaries. Server definitions live in
-**`~/.pi/agent/mcp.json`**, rendered from the template
-[`pi/mcp.json.template`](../pi/mcp.json.template) by `scripts/render.sh`.
+**`~/.pi/agent/mcp.json`** — this file is **not templated**; it is created
+and managed directly on the machine. See the note below.
 
 ## Generated files (gitignored, never vendored)
 
@@ -51,7 +51,21 @@ Both regenerate; the vendor tree carries neither.
 
 ## Operating notes
 
-- Add/remove a server by editing `mcp.json` (restart pi or reload; the cache
-  rebuilds on hash change).
+- Add/remove a server by editing `mcp.json` directly (restart pi or reload;
+  the cache rebuilds on hash change).
+- **`mcp.json` is live-only** — no template or render step. Create it manually
+  on each mirror by hand-writing the `mcpServers` object:
+
+```json
+{
+  "mcpServers": {
+    "server-name": {
+      "command": "/path/to/binary",
+      "args": ["arg1"]
+    }
+  }
+}
+```
+
 - `apple-music` and `safari-mcp` are local-only by construction — nothing in the
   mirror's `mcp.json` reaches the network. Add more servers as needed.

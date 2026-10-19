@@ -88,7 +88,7 @@ because `refs/original` still references them — delete those refs first.
 | Location | Personal data | Status in this repo |
 |---|---|---|
 | `~/.pi/agent/SYSTEM.md` | phone number | vendored as `pi/SYSTEM.md` with `{{PI_NOTIFY_PHONE}}` — rendered by `scripts/render.sh` |
-| `~/.pi/agent/mcp.json` | none in the current template (all servers are local) | vendored as `pi/mcp.json.template` — rendered by `scripts/render.sh` |
+| `~/.pi/agent/mcp.json` | server definitions (local paths) | **live-only** (no template; created by hand on each mirror) |
 | `~/.pi/agent/pi-imessage/config.json` | `meHandles` (phone + Apple ID email), `allowFrom` | never vendored; `config.example.json` + render.sh materialize it |
 | `~/.pi/agent/auth.json`, `models-store.json`, `mcp-cache.json` | provider keys / generated caches | **never vendored** — gitignored, regeneratable or secret |
 

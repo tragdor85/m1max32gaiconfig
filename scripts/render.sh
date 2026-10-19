@@ -8,8 +8,9 @@
 # Targets (repo file -> destination):
 #   pi/SYSTEM.md                          -> ~/.pi/agent/SYSTEM.md
 #   pi/extensions/pi-imessage/config.example.json -> ~/.pi/agent/pi-imessage/config.json
-#   pi/mcp.json.template                  -> ~/.pi/agent/mcp.json
 # (global-todo SKILL.md/README.md are rendered by install.sh after the skill copy)
+#
+# Note: mcp.json is live-only (no template); it is managed directly on the machine.
 #
 # Rules:
 #   - only vars present (non-empty) in .env are substituted
@@ -70,4 +71,3 @@ render_one() { # $1=src $2=dst
 echo "rendering from $ENV_FILE"
 render_one "$REPO/pi/SYSTEM.md"                       "$HOME/.pi/agent/SYSTEM.md"
 render_one "$REPO/pi/extensions/pi-imessage/config.example.json" "$HOME/.pi/agent/pi-imessage/config.json"
-render_one "$REPO/pi/mcp.json.template"               "$HOME/.pi/agent/mcp.json"
