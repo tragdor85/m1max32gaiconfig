@@ -15,7 +15,7 @@ unified memory, with the same extensions, skills, and MCP integrations.
 | Doc | Contents |
 |-----|----------|
 | [docs/01-system-specs.md](docs/01-system-specs.md) | Hardware, OS, and toolchain versions (what "M1 Max 32 G" means in practice). |
-| [docs/02-pi.md](docs/02-pi.md) | pi source, install, version, the `~/.pi/agent` config directory map, `settings.json`, and the global AGENTS.md (`SYSTEM.md`). |
+| [docs/02-pi.md](docs/02-pi.md) | pi source, install, version, the `~/.pi/agent` config directory map, `settings.json`, and the global SYSTEM.md and AGENTS.md. |
 | [docs/03-models.md](docs/03-models.md) | Models: the three local Splash models and how pi is configured for them. |
 | [docs/04-splash.md](docs/04-splash.md) | The M1/M2 Metal-kernel Splash fork, version, build, server config, `splash-serve` launcher, launchd watchdog, and day-2 operations. |
 | [docs/05-extensions.md](docs/05-extensions.md) | Every pi extension and skill in use: npm packages, the local iMessage extension, the global-todo skill, and what's deliberately disabled. |
