@@ -19,7 +19,7 @@ unified memory, with the same extensions, skills, and MCP integrations.
 | [docs/03-models.md](docs/03-models.md) | Models: the three local Splash models and how pi is configured for them. |
 | [docs/04-splash.md](docs/04-splash.md) | The M1/M2 Metal-kernel Splash fork, version, build, server config, `splash-serve` launcher, launchd watchdog, and day-2 operations. |
 | [docs/05-extensions.md](docs/05-extensions.md) | Every pi extension and skill in use: npm packages, the local iMessage extension, the global-todo skill, and what's deliberately disabled. |
-| [docs/06-mcp.md](docs/06-mcp.md) | The two MCP servers (Apple Music, Safari), how the builtin MCP gateway works, and live server config. |
+| [docs/06-mcp.md](docs/06-mcp.md) | The builtin MCP gateway, adding MCP servers to mcp.json, and how the cache works. |
 | [docs/07-sanitizing-local-repos.md](docs/07-sanitizing-local-repos.md) | How the three local repos (pi-imessage, splash-serve, pi-todo) were sanitized, history-rewritten, and published, plus a reusable pre-publish checklist. |
 
 ## Vendored config
